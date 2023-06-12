@@ -31,18 +31,25 @@ def load_excel_data():
             print("Gagal membaca file:", str(e))
     return None
 
-def crossover(population1, population2): #parent
-    diff_population = np.abs(population1 - population2)
+def crossover(population): 
+    # Mengambil kromsom yang disebut parent
+    num_rows = population.shape[0]
+
+    # Memilih dua kromosom secara acak
+    parent1_index, parent2_index = np.random.choice(num_rows, size=2, replace=False)
+    
+    # Mengambil kromosom parent 1 dan parent 2
+    parent1 = population[parent1_index]
+    parent2 = population[parent2_index]
+
+    # Melakukan perhitungan
     beta = np.random.rand()
-    crossover_result = diff_population * beta
+    offspring = (beta * (parent1 - parent2)+parent1)
 
-    # Pilih salah satu populasi awal secara acak
-    random_population = population1 if np.random.rand() < 0.5 else population2
+    #Jika hasil negatif maka akan menjadi nilai mutlak
+    offspring = np.abs(offspring)
 
-    # Hitung nilai fitness
-    fitness_result = (crossover_result + random_population) / random_population
-
-    return crossover_result, fitness_result
+    return offspring, parent2, parent1
 
 def mutation(population):
     min_value = 0
