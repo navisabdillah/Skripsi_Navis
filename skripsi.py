@@ -20,11 +20,12 @@ def display_population(population):
     return output_text
 
 def load_excel_data():
+    global loaded_data, is_data_loaded
     file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
     if file_path:
         try:
-            global loaded_data
             loaded_data = pd.read_excel(file_path)
+            is_data_loaded = True
             return loaded_data
         except Exception as e:
             print("Gagal membaca file:", str(e))
@@ -60,6 +61,10 @@ def mutation(population):
 def generate_population():
     num_rows = int(row_entry.get())
     num_cols = 5  # Jumlah kolom tetap 5
+
+    if not is_data_loaded:
+        tk.messagebox.showwarning("Peringatan", "Masukkan data Excel terlebih dahulu")
+        return
 
     population = create_population(num_rows, num_cols)
     population_text = display_population(population)
