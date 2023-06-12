@@ -4,10 +4,20 @@ import tkinter as tk
 from tkinter import filedialog, Toplevel
 
 loaded_data = None
+is_data_loaded = False
 
-def create_population(num_chromosomes, num_population):
-    population = np.random.rand(num_chromosomes, num_population)
+def create_population(rows, cols):
+    population = np.random.rand(rows, cols)
     return population
+
+def display_population(population):
+    output_text = "Nilai:\n"
+    for row in range(population.shape[0]):
+        for col in range(population.shape[1]):
+            output_text += "{:.2f}".format(population[row][col]) + "\t"
+        output_text += "\n"
+    
+    return output_text
 
 def load_excel_data():
     file_path = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
@@ -48,10 +58,11 @@ def mutation(population):
     return mutation_result, fitness_result
 
 def generate_population():
-    num_chromosomes = int(chromosomes_entry.get())
-    num_population = int(population_entry.get())
+    num_rows = int(row_entry.get())
+    num_cols = 5  # Jumlah kolom tetap 5
 
-    population = create_population(num_chromosomes, num_population)
+    population = create_population(num_rows, num_cols)
+    population_text = display_population(population)
 
     # Tampilkan hasil input kromosom dan populasi
     result_window = Toplevel(window)
@@ -125,11 +136,11 @@ window.geometry("400x400")
 data_button = tk.Button(window, text="Load Data", command=load_excel_data)
 data_button.pack()
 
-chromosomes_label = tk.Label(window, text="Jumlah Kromosom:")
-chromosomes_label.pack()
-
-chromosomes_entry = tk.Entry(window)
-chromosomes_entry.pack()
+# Label dan Entry untuk jumlah Kromosom
+row_label = tk.Label(window, text="Jumlah Kromosom:")
+row_label.pack()
+row_entry = tk.Entry(window)
+row_entry.pack()
 
 population_label = tk.Label(window, text="Jumlah Populasi:")
 population_label.pack()
