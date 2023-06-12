@@ -52,18 +52,25 @@ def crossover(population):
     return offspring, parent2, parent1
 
 def mutation(population):
+     # Pilih salah satu populasi awal secara acak
+    num_rows = population.shape[0]
+    random = np.random.choice(num_rows)
+    parent = population[random]
+
     min_value = 0
     max_value = 1
     r = np.random.uniform(low=-0.1, high=0.1)
-    mutation_result = population + r * (max_value - min_value)
+    
+    mutation_result = parent + r * (max_value - min_value)
 
-    # Pilih salah satu populasi awal secara acak
-    random_population = population[np.random.choice(len(population))]
+    #Jika hasil negatif maka akan mengalami nilai mutlak
+    mutation_result = np.abs(mutation_result)
 
-    # Hitung nilai fitness
-    fitness_result = (mutation_result + random_population) / random_population
+    # # Hitung nilai fitness
+    # fitness_result = (mutation_result + parent)  / (mutation_result)
+    # total_fitness = 1/np.sum(fitness_result) 
 
-    return mutation_result, fitness_result
+    return mutation_result, parent
 
 def generate_population():
     num_rows = int(row_entry.get())
